@@ -818,6 +818,10 @@ private:
   llvm::opt::Visibility
   getOptionVisibilityMask(bool UseDriverMode = true) const;
 
+  /// ACTypes is enabled
+  bool ACTypesEnabled = false;
+  void setACTypesEnabled() { ACTypesEnabled = true; };
+
   /// Helper used in BuildJobsForAction.  Doesn't use the cache when building
   /// jobs specifically for the given action, but will use the cache when
   /// building jobs for the Action's inputs.
@@ -926,6 +930,8 @@ public:
   const std::string getFPGATempDepFile(const std::string &FileName) const {
     return FPGATempDepFiles[FileName];
   }
+
+  bool isACTypesEnabled() const { return ACTypesEnabled; };
 
   /// isSYCLDefaultTripleImplied - The default SYCL triple (spir64) has been
   /// added or should be added given proper criteria.

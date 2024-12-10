@@ -291,6 +291,12 @@ static const char *getLDMOption(const llvm::Triple &T, const ArgList &Args) {
   }
 }
 
+// Add AC Types libraries
+static void addACTypesLibs(ArgStringList &CmdArgs,
+    const llvm::opt::ArgList &Args, const ToolChain &TC) {
+  TC.AddACTypesLibArgs(Args, CmdArgs, "-l");
+}
+
 static bool getStaticPIE(const ArgList &Args, const ToolChain &TC) {
   bool HasStaticPIE = Args.hasArg(options::OPT_static_pie);
   if (HasStaticPIE && Args.hasArg(options::OPT_no_pie)) {
@@ -566,6 +572,8 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   Args.addAllArgs(CmdArgs, {options::OPT_L, options::OPT_u});
 
+  if (ToolChain.getDriver().isACTypesEnabled())
+    ToolChain.AddACTypesLibPath(Args, CmdArgs, "-L");
   ToolChain.AddFilePathLibArgs(Args, CmdArgs);
 
   if (D.isUsingLTO()) {
@@ -623,6 +631,9 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   // The profile runtime also needs access to system libraries.
   getToolChain().addProfileRTLibs(Args, CmdArgs);
+
+  if (D.isACTypesEnabled())
+    addACTypesLibs(CmdArgs, Args, ToolChain);
 
   if (D.CCCIsCXX() &&
       !Args.hasArg(options::OPT_nostdlib, options::OPT_nodefaultlibs,

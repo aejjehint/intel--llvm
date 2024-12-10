@@ -151,6 +151,12 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-defaultlib:sycl-devicelib-host.lib");
   }
 
+  if (C.getDriver().isACTypesEnabled()) {
+    getToolChain().AddACTypesLibPath(Args, CmdArgs, "-libpath:");
+    if (!C.getDriver().IsCLMode())
+      getToolChain().AddACTypesLibArgs(Args, CmdArgs, "-defaultlib:");
+  }
+
   // Suppress multiple section warning LNK4078
   if (Args.hasFlag(options::OPT_fsycl, options::OPT_fno_sycl, false))
     CmdArgs.push_back("/IGNORE:4078");
@@ -766,6 +772,9 @@ void MSVCToolChain::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
 
   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
     return;
+
+  if (getDriver().isACTypesEnabled())
+    addSystemInclude(DriverArgs, CC1Args, ToolChain::GetACTypesIncludePath());
 
   // Honor %INCLUDE% and %EXTERNAL_INCLUDE%. It should have essential search
   // paths set by vcvarsall.bat. Skip if the user expressly set a vctoolsdir.

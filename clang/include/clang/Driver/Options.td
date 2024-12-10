@@ -7158,6 +7158,10 @@ defm sycl_allow_device_image_dependencies: BoolOptionWithoutMarshalling<"f", "sy
 def fsycl_dump_device_code_EQ : Joined<["-"], "fsycl-dump-device-code=">,
   Flags<[NoXarchOption]>,
   HelpText<"Dump device code into the user provided directory.">;
+def qactypes : Flag<["-"], "qactypes">, HelpText<"Enable compile and link "
+  "support for the Algorithmic C Data-types (AC types)">;
+def qno_actypes : Flag<["-"], "qno-actypes">, HelpText<"Disable the compile "
+  "and link support for the Algorithmic C Data-types (AC types)">;
 } // let Group = sycl_Group
 
 // FIXME: -fsycl-explicit-simd is deprecated. remove it when support is dropped.
@@ -9122,6 +9126,10 @@ def : CLFlag<"Qgather-">, Alias<mno_gather>,
       HelpText<"Disable generation of gather instructions in auto-vectorization(x86 only)">;
 def : CLFlag<"Qscatter-">, Alias<mno_scatter>,
       HelpText<"Disable generation of scatter instructions in auto-vectorization(x86 only)">;
+def : CLFlag<"Qactypes">, Alias<qactypes>, HelpText<"Enable compile and link "
+  "support for the Algorithmic C Data-types (AC types)">;
+def : CLFlag<"Qactypes-">, Alias<qno_actypes>, HelpText<"Disable the compile "
+  "and link support for the Algorithmic C Data-types (AC types)">;
 
 // Non-aliases:
 

@@ -750,6 +750,22 @@ public:
   virtual void AddCCKextLibArgs(const llvm::opt::ArgList &Args,
                                 llvm::opt::ArgStringList &CmdArgs) const;
 
+  /// GetACTypesIncludePath - return the AC Types include search path.
+  std::string GetACTypesIncludePath(void) const;
+
+  /// GetACTypesLibPath - return the AC Types library path.
+  std::string GetACTypesLibPath(void) const;
+
+  /// AddACTypesLibPath - Add the AC Types library search path.
+  void AddACTypesLibPath(const llvm::opt::ArgList &Args,
+                         llvm::opt::ArgStringList &CmdArgs,
+                         std::string Opt) const;
+
+  /// AddACTypesLibArgs - Add the AC Types library arguments.
+  void AddACTypesLibArgs(const llvm::opt::ArgList &Args,
+                         llvm::opt::ArgStringList &CmdArgs,
+                         std::string Prefix) const;
+
   /// If a runtime library exists that sets global flags for unsafe floating
   /// point math, return true.
   ///

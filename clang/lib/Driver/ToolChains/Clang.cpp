@@ -1164,6 +1164,13 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
   if (JA.isOffloading(Action::OFK_HIP))
     getToolChain().AddHIPIncludeArgs(Args, CmdArgs);
 
+  // Add the AC Types header directories before the SYCL headers
+  if (D.isACTypesEnabled()) {
+    CmdArgs.push_back("-internal-isystem");
+    CmdArgs.push_back(
+        Args.MakeArgString(getToolChain().GetACTypesIncludePath()));
+  }
+
   if (JA.isOffloading(Action::OFK_SYCL)) {
     getToolChain().AddSYCLIncludeArgs(Args, CmdArgs);
     if (Inputs[0].getType() == types::TY_CUDA) {
@@ -5380,6 +5387,8 @@ static void ProcessVSRuntimeLibrary(const ToolChain &TC, const ArgList &Args,
       }
       CmdArgs.push_back("--dependent-lib=sycl-devicelib-host");
     }
+    if (TC.getDriver().isACTypesEnabled())
+      TC.AddACTypesLibArgs(Args, CmdArgs, "--dependent-lib=");
   }
 
   // All Arm64EC object files implicitly add softintrin.lib. This is necessary

@@ -2074,6 +2074,20 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
     }
   }
 
+  // ACTypes is enabled with -fintelfpga and a valid installation.
+  if (TranslatedArgs->hasFlag(
+          options::OPT_qactypes, options::OPT_qno_actypes,
+          TranslatedArgs->hasArg(options::OPT_fintelfpga))) {
+    // Use of -qactypes will force inclusion even with no valid installation.
+    // TODO: When no valid installation is found, emit a diagnostic informing
+    // the user of where to find install instructions for the bits.
+    if (llvm::sys::fs::is_directory(
+            C->getDefaultToolChain().GetACTypesIncludePath()) ||
+        TranslatedArgs->hasFlag(options::OPT_qactypes, options::OPT_qno_actypes,
+                                false))
+      setACTypesEnabled();
+  }
+
   // Construct the list of abstract actions to perform for this compilation. On
   // MachO targets this uses the driver-driver and universal actions.
   if (TC.getTriple().isOSBinFormatMachO())
