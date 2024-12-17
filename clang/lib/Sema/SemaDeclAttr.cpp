@@ -4696,6 +4696,21 @@ OptimizeNoneAttr *Sema::mergeOptimizeNoneAttr(Decl *D,
   return ::new (Context) OptimizeNoneAttr(Context, CI);
 }
 
+PreferDSPAttr *Sema::mergePreferDSPAttr(Decl *D, const PreferDSPAttr &AL) {
+  if (checkAttrMutualExclusion<PreferSoftLogicAttr>(*this, D, AL))
+    return nullptr;
+
+  return ::new (Context) PreferDSPAttr(Context, AL);
+}
+
+PreferSoftLogicAttr *Sema::mergePreferSoftLogicAttr(
+    Decl *D, const PreferSoftLogicAttr &AL) {
+  if (checkAttrMutualExclusion<PreferDSPAttr>(*this, D, AL))
+    return nullptr;
+
+  return ::new (Context) PreferSoftLogicAttr(Context, AL);
+}
+
 static void handleAlwaysInlineAttr(Sema &S, Decl *D, const ParsedAttr &AL) {
   if (AlwaysInlineAttr *Inline =
           S.mergeAlwaysInlineAttr(D, AL, AL.getAttrName()))
@@ -6698,6 +6713,12 @@ ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D, const ParsedAttr &AL,
     break;
   case ParsedAttr::AT_EnumExtensibility:
     handleEnumExtensibilityAttr(S, D, AL);
+    break;
+  case ParsedAttr::AT_PreferDSP:
+    handleSimpleAttribute<PreferDSPAttr>(S, D, AL);
+    break;
+  case ParsedAttr::AT_PreferSoftLogic:
+    handleSimpleAttribute<PreferSoftLogicAttr>(S, D, AL);
     break;
   case ParsedAttr::AT_SYCLKernel:
     S.SYCL().handleKernelAttr(D, AL);

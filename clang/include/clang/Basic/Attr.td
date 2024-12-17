@@ -5579,6 +5579,27 @@ def Builtin : InheritableAttr {
   let Documentation = [InternalOnly];
 }
 
+def PreferDSP : InheritableAttr {
+  let Spellings = [CXX11<"intel", "prefer_dsp">, GNU<"prefer_dsp">];
+  let Subjects = SubjectList<[Function], ErrorDiag>;
+  let Documentation = [Undocumented];
+}
+
+def PreferSoftLogic : InheritableAttr {
+  let Spellings = [CXX11<"intel", "prefer_softlogic">, GNU<"prefer_softlogic">];
+  let Subjects = SubjectList<[Function], ErrorDiag>;
+  let Documentation = [Undocumented];
+}
+
+def PropagateDSPPreference : InheritableAttr {
+  let Spellings = [CXX11<"intel", "propagate_dsp_preference">, GNU<"propagate_dsp_preference">];
+  let Subjects = SubjectList<[Function], ErrorDiag>;
+  let Documentation = [Undocumented];
+  let SimpleHandler = 1;
+}
+
+def : MutualExclusions<[PreferDSP, PreferSoftLogic]>;
+
 def EnforceTCB : InheritableAttr {
   let Spellings = [Clang<"enforce_tcb">];
   let Subjects = SubjectList<[Function, ObjCMethod]>;

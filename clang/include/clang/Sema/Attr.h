@@ -143,7 +143,7 @@ bool checkAttrMutualExclusion(SemaBase &S, Decl *D, const Attr &AL) {
     S.Diag(AL.getLocation(), diag::err_attributes_are_not_compatible)
         << &AL << A
         << (AL.isRegularKeywordAttribute() || A->isRegularKeywordAttribute());
-    Diag(A->getLocation(), diag::note_conflicting_attribute);
+    S.Diag(A->getLocation(), diag::note_conflicting_attribute);
     return true;
   }
   return false;

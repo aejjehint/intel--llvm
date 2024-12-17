@@ -2854,6 +2854,10 @@ static bool mergeDeclAttribute(Sema &S, NamedDecl *D,
     NewAttr = nullptr;
   else if (const auto *UA = dyn_cast<UuidAttr>(Attr))
     NewAttr = S.mergeUuidAttr(D, *UA, UA->getGuid(), UA->getGuidDecl());
+  else if (const auto *PDA = dyn_cast<PreferDSPAttr>(Attr))
+    NewAttr = S.mergePreferDSPAttr(D, *PDA);
+  else if (const auto *PSLA = dyn_cast<PreferSoftLogicAttr>(Attr))
+    NewAttr = S.mergePreferSoftLogicAttr(D, *PSLA);
   else if (const auto *IMA = dyn_cast<WebAssemblyImportModuleAttr>(Attr))
     NewAttr = S.Wasm().mergeImportModuleAttr(D, *IMA);
   else if (const auto *INA = dyn_cast<WebAssemblyImportNameAttr>(Attr))

@@ -4562,6 +4562,9 @@ public:
                                           const AttributeCommonInfo &CI,
                                           const IdentifierInfo *Ident);
   MinSizeAttr *mergeMinSizeAttr(Decl *D, const AttributeCommonInfo &CI);
+  PreferDSPAttr *mergePreferDSPAttr(Decl *D, const PreferDSPAttr &AL);
+  PreferSoftLogicAttr *mergePreferSoftLogicAttr(Decl *D,
+                                                const PreferSoftLogicAttr &AL);
   OptimizeNoneAttr *mergeOptimizeNoneAttr(Decl *D,
                                           const AttributeCommonInfo &CI);
   InternalLinkageAttr *mergeInternalLinkageAttr(Decl *D, const ParsedAttr &AL);
