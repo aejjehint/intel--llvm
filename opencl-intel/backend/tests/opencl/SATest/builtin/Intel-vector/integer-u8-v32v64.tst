@@ -1,0 +1,42 @@
+; Check that v32 and v64 builtins are used.
+
+; RUN: SATest -BUILD --config=%s.cfg -tsize=32 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK32
+; RUN: SATest -BUILD --config=%s.cfg -tsize=64 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK64
+
+; CHECK32: call zeroext <32 x i8> @_Z3absDv32_h(<32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z8abs_diffDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z7add_satDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z4haddDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z5rhaddDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z5clampDv32_hS_S_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z3clzDv32_h(<32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z6mad_hiDv32_hS_S_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z7mad_satDv32_hS_S_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z3maxDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z3minDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z6mul_hiDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z6rotateDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z7sub_satDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z8popcountDv32_h(<32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z3ctzDv32_h(<32 x i8> noundef zeroext {{.*}})
+; CHECK32: call zeroext <32 x i16> @_Z8upsampleDv32_hS_(<32 x i8> noundef zeroext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+
+; CHECK64: call zeroext <64 x i8> @_Z3absDv64_h(<64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z8abs_diffDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z7add_satDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z4haddDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z5rhaddDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z5clampDv64_hS_S_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z3clzDv64_h(<64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z6mad_hiDv64_hS_S_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z7mad_satDv64_hS_S_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z3maxDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z3minDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z6mul_hiDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z6rotateDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z7sub_satDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z8popcountDv64_h(<64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z3ctzDv64_h(<64 x i8> noundef zeroext {{.*}})
+; CHECK64: call zeroext <64 x i16> @_Z8upsampleDv64_hS_(<64 x i8> noundef zeroext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+
+; CHECK: Test program was successfully built.

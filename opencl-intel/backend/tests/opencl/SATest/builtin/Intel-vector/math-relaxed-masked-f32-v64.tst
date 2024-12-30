@@ -1,0 +1,73 @@
+; Check that v64(expand from v32) builtins are used.
+
+; Disable the test in debug build since CHECK-SVML will be complicated.
+; UNSUPPORTED: debug-build
+
+; RUN: SATest -BUILD --config=%S/math-relaxed-masked-f32.tst.cfg -tsize=64 -cpuarch=skx -llvm-option=-print-after=sycl-kernel-relaxed-math -dump-llvm-file %t.ll 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK-RM
+; RUN: FileCheck %s --input-file=%t.ll -check-prefix=CHECK-SVML
+
+; RUN: SATest -BUILD --config=%S/math-relaxed-masked-f32.tst.cfg -tsize=64 -cpuarch=core-avx2 -llvm-option=-print-after=sycl-kernel-relaxed-math 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK-RM
+
+; CHECK-RM: call{{.*}} <64 x float> @_Z6cos_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6exp_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z7exp2_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z8exp10_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6log_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z7log2_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6pow_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6sin_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6tan_rmDv64_f(<64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z9sincos_rmDv64_fPf(<64 x float> {{.*}}, {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6cos_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6exp_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z7exp2_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z8exp10_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6log_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z7log2_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6pow_rmDv64_fS_S_(<64 x float> {{.*}}, <64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6sin_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z6tan_rmDv64_fS_(<64 x float> {{.*}}, <64 x float> {{.*}})
+; CHECK-RM: call{{.*}} <64 x float> @_Z9sincos_rmDv64_fPfS_(<64 x float> {{.*}}, {{.*}}, <64 x float> {{.*}})
+
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_cosf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_cosf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_expf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_expf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp10f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp10f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_logf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_logf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_log2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_log2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_powf32_rm(<32 x float> {{.*}}, <32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_powf32_rm(<32 x float> {{.*}}, <32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sinf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sinf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_tanf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_tanf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sincosf32_rm(<32 x float> {{.*}}, {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sincosf32_rm(<32 x float> {{.*}}, {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_cosf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_cosf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_expf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_expf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp10f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_exp10f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_logf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_logf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_log2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_log2f32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_powf32_rm(<32 x float> {{.*}}, <32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_powf32_rm(<32 x float> {{.*}}, <32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sinf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sinf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_tanf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_tanf32_rm(<32 x float> {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sincosf32_rm(<32 x float> {{.*}}, {{.*}})
+; CHECK-SVML: call{{.*}} intel_ocl_bicc_avx512 <32 x float> @__ocl_svml_{{[xz]}}0_sincosf32_rm(<32 x float> {{.*}}, {{.*}})
+
+; CHECK: Test program was successfully built
