@@ -21,7 +21,7 @@ def do_configure(args):
     if not os.path.isdir(abs_obj_dir):
         os.makedirs(abs_obj_dir)
 
-    llvm_external_projects = "sycl;llvm-spirv;opencl;xpti;xptifw"
+    llvm_external_projects = "sycl;llvm-spirv;opencl-intel;opencl;xpti;xptifw"
 
     # libdevice build requires a working SYCL toolchain, which is not the case
     # with macOS target right now.
@@ -61,6 +61,8 @@ def do_configure(args):
     llvm_enable_lld = "OFF"
     sycl_enabled_backends = ["opencl"]
     sycl_preview_lib = "ON"
+    sycl_enable_opencl_cpu_rt_build = 'OFF'
+    sycl_enable_fpga_emu_build = 'OFF'
 
     sycl_enable_xpti_tracing = "ON"
     xpti_enable_werror = "OFF"
@@ -76,6 +78,11 @@ def do_configure(args):
     libclc_enabled = args.cuda or args.hip or args.native_cpu
     if libclc_enabled:
         llvm_enable_projects += ";libclc"
+
+    if args.bldocl:
+        sycl_enable_opencl_cpu_rt_build = 'ON'
+    if args.bldfpgaemu:
+        sycl_enable_fpga_emu_build = 'ON'
 
     if args.cuda:
         llvm_targets_to_build += ";NVPTX"
@@ -178,6 +185,10 @@ def do_configure(args):
         "-DLLVM_ENABLE_PROJECTS={}".format(llvm_enable_projects),
         "-DSYCL_BUILD_PI_HIP_PLATFORM={}".format(sycl_build_pi_hip_platform),
         "-DLLVM_BUILD_TOOLS=ON",
+        "-DOPENCL_INTREE_BUILD=ON",
+        "-DSYCL_ENALBE_OPENCL_CPU_RT_BUILD={}".format(sycl_enable_opencl_cpu_rt_build),
+        "-DSYCL_ENALBE_FPGA_EMU_RT_BUILD={}".format(sycl_enable_fpga_emu_build),
+        "-DCOMMON_CLANG_LIBRARY_NAME=common_clang",
         "-DLLVM_ENABLE_ZSTD={}".format(llvm_enable_zstd),
         "-DLLVM_USE_STATIC_ZSTD=ON",
         "-DSYCL_ENABLE_WERROR={}".format(sycl_werror),
@@ -332,6 +343,8 @@ def main():
         default="host",
         help="host LLVM target architecture, defaults to 'host', multiple targets may be provided as a semi-colon separated string",
     )
+    parser.add_argument("-bldocl", "--bldocl", action='store_true', help="build OpenCL CPU RT")
+    parser.add_argument("-bldfpgaemu", "--bldfpgaemu", action='store_true', help="build FPGA EMU RT")
     parser.add_argument(
         "--enable-all-llvm-targets",
         action="store_true",

@@ -29,6 +29,7 @@ add_llvm_component_library(LLVMPasses
   Scalar
   Support
   SYCLLowerIR
+  SYCLTransforms
   Target
   TransformUtils
   Vectorize
