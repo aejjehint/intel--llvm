@@ -456,11 +456,16 @@ if(NOT BUILD_X64)
   set(_tbb_arch_suffix 32)
 endif()
 
+message(STATUS "TBB_DIR: ${TBB_DIR}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
 # TBB_LIBRARY_DIR - Used for LIT environment
-if(EXISTS "${TBB_ROOT_DIR}/tbb")
-  set(TBB_DIR "${TBB_ROOT_DIR}/tbb/${TBB_MAJOR_VERSION}/lib/cmake/tbb")
-else()
-  set(TBB_DIR "${TBB_ROOT_DIR}/lib/cmake/tbb")
+if(NOT DEFINED TBB_DIR)
+  if(EXISTS "${TBB_ROOT_DIR}/tbb")
+    set(TBB_DIR "${TBB_ROOT_DIR}/tbb/${TBB_MAJOR_VERSION}/lib/cmake/tbb")
+  else()
+    set(TBB_DIR "${TBB_ROOT_DIR}/lib/cmake/tbb")
+  endif()
 endif()
 # Other components (eg: UMF) might set TBB_FOUND to false,
 # it might cause conflicts with the find_package below.
