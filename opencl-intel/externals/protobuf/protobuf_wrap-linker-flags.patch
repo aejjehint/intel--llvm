@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04cb3303a..eeb2f09f3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -262,14 +253,14 @@ if (MSVC)
+     /wd4996 # The compiler encountered a deprecated declaration.
+   )
+   # Allow big object
+   add_compile_options(/bigobj)
+   string(REPLACE "/" "\\" PROTOBUF_SOURCE_WIN32_PATH ${protobuf_SOURCE_DIR})
+   string(REPLACE "/" "\\" PROTOBUF_BINARY_WIN32_PATH ${protobuf_BINARY_DIR})
+   string(REPLACE "." ","  protobuf_RC_FILEVERSION "${protobuf_VERSION}")
+   configure_file(${protobuf_SOURCE_DIR}/cmake/extract_includes.bat.in extract_includes.bat)
+ 
+   # Suppress linker warnings about files with no symbols defined.
+-  set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4221")
++  set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} ${CMAKE_CXX_LINKER_WRAPPER_FLAG}/ignore:4221")
+ 
+   if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     # Configure Resource Compiler

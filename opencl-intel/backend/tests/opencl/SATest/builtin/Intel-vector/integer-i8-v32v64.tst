@@ -1,0 +1,42 @@
+; Check that v32 and v64 builtins are used.
+
+; RUN: SATest -BUILD --config=%s.cfg -tsize=32 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK32
+; RUN: SATest -BUILD --config=%s.cfg -tsize=64 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK64
+
+; CHECK32: call zeroext <32 x i8> @_Z3absDv32_c(<32 x i8> noundef signext {{.*}})
+; CHECK32: call zeroext <32 x i8> @_Z8abs_diffDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z7add_satDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z4haddDv32_cS_(<32 x i8> noundef {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z5rhaddDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z5clampDv32_cS_S_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z3clzDv32_c(<32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z6mad_hiDv32_cS_S_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z7mad_satDv32_cS_S_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z3maxDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z3minDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z6mul_hiDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z6rotateDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z7sub_satDv32_cS_(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z8popcountDv32_c(<32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i8> @_Z3ctzDv32_c(<32 x i8> noundef signext {{.*}})
+; CHECK32: call signext <32 x i16> @_Z8upsampleDv32_cDv32_h(<32 x i8> noundef signext {{.*}}, <32 x i8> noundef zeroext {{.*}})
+
+; CHECK64: call zeroext <64 x i8> @_Z3absDv64_c(<64 x i8> noundef signext {{.*}})
+; CHECK64: call zeroext <64 x i8> @_Z8abs_diffDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z7add_satDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z4haddDv64_cS_(<64 x i8> noundef {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z5rhaddDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z5clampDv64_cS_S_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z3clzDv64_c(<64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z6mad_hiDv64_cS_S_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z7mad_satDv64_cS_S_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z3maxDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z3minDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z6mul_hiDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z6rotateDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z7sub_satDv64_cS_(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z8popcountDv64_c(<64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i8> @_Z3ctzDv64_c(<64 x i8> noundef signext {{.*}})
+; CHECK64: call signext <64 x i16> @_Z8upsampleDv64_cDv64_h(<64 x i8> noundef signext {{.*}}, <64 x i8> noundef zeroext {{.*}})
+
+; CHECK: Test program was successfully built.

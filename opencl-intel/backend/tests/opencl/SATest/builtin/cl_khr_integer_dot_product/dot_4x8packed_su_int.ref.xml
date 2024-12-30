@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ICSCData>
+  <BufferContainerList size="1" version="0.1">
+    <BufferContainer size="3">
+      <Buffer length="8" type="i32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">-128</Vector>
+        <Vector id="1">-81408</Vector>
+        <Vector id="2">-16256</Vector>
+        <Vector id="3">-64707</Vector>
+        <Vector id="4">-24384</Vector>
+        <Vector id="5">-16320</Vector>
+        <Vector id="6">0</Vector>
+        <Vector id="7">252</Vector>
+      </Buffer>
+      <Buffer length="8" type="u32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">0x80808080</Vector>
+        <Vector id="1">0x80808081</Vector>
+        <Vector id="2">0x81818181</Vector>
+        <Vector id="3">0x8181c0c0</Vector>
+        <Vector id="4">0xc0c0c0c0</Vector>
+        <Vector id="5">0xc0000000</Vector>
+        <Vector id="6">0x00000000</Vector>
+        <Vector id="7">0x3f3f3f3f</Vector>
+      </Buffer>
+      <Buffer length="8" type="u32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">0x00010000</Vector>
+        <Vector id="1">0x7ffeff00</Vector>
+        <Vector id="2">0x0100007f</Vector>
+        <Vector id="3">0xfeff0001</Vector>
+        <Vector id="4">0x00007ffe</Vector>
+        <Vector id="5">0xff000100</Vector>
+        <Vector id="6">0x007ffeff</Vector>
+        <Vector id="7">0x01010101</Vector>
+      </Buffer>
+    </BufferContainer>
+  </BufferContainerList>
+</ICSCData>

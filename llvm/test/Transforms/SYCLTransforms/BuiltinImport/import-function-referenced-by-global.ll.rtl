@@ -1,0 +1,62 @@
+; This module is used by import-function-referenced-by-global.ll
+
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-win32-gnu-elf"
+
+@coord_translate_i_callback = constant [2 x ptr] [ptr @_Z41trans_coord_int_CLAMPTOEDGE_FALSE_NEARESTPvDv4_i, ptr @_Z25trans_coord_int_UNDEFINEDPvDv4_i], align 16
+
+define <4 x i32> @_Z3minDv4_iS_(<4 x i32> %x, <4 x i32> %y) {
+entry:
+  %0 = call <4 x i32> @llvm.smin.v4i32(<4 x i32> %x, <4 x i32> %y)
+  ret <4 x i32> %0
+}
+
+define <4 x i32> @_Z3maxDv4_iS_(<4 x i32> %x, <4 x i32> %y) {
+entry:
+  %0 = call <4 x i32> @llvm.smax.v4i32(<4 x i32> %x, <4 x i32> %y)
+  ret <4 x i32> %0
+}
+
+define <4 x i32> @_Z41trans_coord_int_CLAMPTOEDGE_FALSE_NEARESTPvDv4_i(ptr nocapture readonly %image, <4 x i32> %coord) !kernel_arg_base_type !0 !kernel_arg_target_ext_type !1 {
+entry:
+  %dimSub1.i = getelementptr inbounds i8, ptr %image, i64 2640
+  %0 = bitcast ptr %dimSub1.i to ptr
+  %1 = addrspacecast ptr %0 to ptr addrspace(4)
+  %2 = load <4 x i32>, ptr addrspace(4) %1, align 16
+  %call.i = tail call <4 x i32> @_Z3minDv4_iS_(<4 x i32> %coord, <4 x i32> %2)
+  %call1.i = tail call <4 x i32> @_Z3maxDv4_iS_(<4 x i32> %call.i, <4 x i32> zeroinitializer)
+  ret <4 x i32> %call1.i
+}
+
+define <4 x i32> @_Z25trans_coord_int_UNDEFINEDPvDv4_i(ptr nocapture readnone %image, <4 x i32> %coord) !kernel_arg_base_type !0 !kernel_arg_target_ext_type !1 {
+entry:
+  ret <4 x i32> zeroinitializer
+}
+
+define ptr @_Z11read_imagef14ocl_image2d_ro11ocl_samplerDv2_i(ptr addrspace(1) %image, i32 %sampler, <2 x i32> %coord) !kernel_arg_base_type !2 !kernel_arg_target_ext_type !3 {
+entry:
+  %call.i = tail call ptr @call_coord_translate_i_callback(i32 %sampler)
+  ret ptr %call.i
+}
+
+define ptr @call_coord_translate_i_callback(i32 %samplerIndex) {
+entry:
+  %idxprom = sext i32 %samplerIndex to i64
+  %arrayidx = getelementptr [2 x ptr], ptr @coord_translate_i_callback, i64 0, i64 %idxprom
+  %0 = bitcast ptr %arrayidx to ptr
+  %1 = load ptr, ptr %0, align 8
+  ret ptr %1
+}
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare <4 x i32> @llvm.smin.v4i32(<4 x i32>, <4 x i32>) #0
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare <4 x i32> @llvm.smax.v4i32(<4 x i32>, <4 x i32>) #0
+
+attributes #0 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+
+!0 = !{!"char*", !"int4"}
+!1 = !{!"", !""}
+!2 = !{!"image2d_t", !"int", !"int2"}
+!3 = !{!"spirv.Image_1_0_0_0_0_0_0", !"", !""}

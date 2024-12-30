@@ -1,0 +1,42 @@
+; Check that v32 and v64 builtins are used.
+
+; RUN: SATest -BUILD --config=%s.cfg -tsize=32 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK32
+; RUN: SATest -BUILD --config=%s.cfg -tsize=64 -cpuarch="skx" -llvm-option=-print-after=vplan-vec 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK64
+
+; CHECK32: call <32 x i32> @_Z3absDv32_i(<32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z8abs_diffDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z7add_satDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z4haddDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z5rhaddDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z5clampDv32_iS_S_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z3clzDv32_i(<32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z6mad_hiDv32_iS_S_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z7mad_satDv32_iS_S_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z3maxDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z3minDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z6mul_hiDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z6rotateDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z7sub_satDv32_iS_(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z8popcountDv32_i(<32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i32> @_Z3ctzDv32_i(<32 x i32> noundef {{.*}})
+; CHECK32: call <32 x i64> @_Z8upsampleDv32_iDv32_j(<32 x i32> noundef {{.*}}, <32 x i32> noundef {{.*}})
+
+; CHECK64: call <64 x i32> @_Z3absDv64_i(<64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z8abs_diffDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z7add_satDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z4haddDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z5rhaddDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z5clampDv64_iS_S_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z3clzDv64_i(<64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z6mad_hiDv64_iS_S_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z7mad_satDv64_iS_S_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z3maxDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z3minDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z6mul_hiDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z6rotateDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z7sub_satDv64_iS_(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z8popcountDv64_i(<64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i32> @_Z3ctzDv64_i(<64 x i32> noundef {{.*}})
+; CHECK64: call <64 x i64> @_Z8upsampleDv64_iDv64_j(<64 x i32> noundef {{.*}}, <64 x i32> noundef {{.*}})
+
+; CHECK: Test program was successfully built.

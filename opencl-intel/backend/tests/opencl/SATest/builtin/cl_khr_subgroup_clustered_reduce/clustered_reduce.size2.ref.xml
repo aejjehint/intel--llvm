@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ICSCData>
+  <BufferContainerList size="1" version="0.1">
+    <BufferContainer size="7">
+      <Buffer length="8" type="i32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">15</Vector>
+        <Vector id="1">15</Vector>
+        <Vector id="2">11</Vector>
+        <Vector id="3">11</Vector>
+        <Vector id="4">7</Vector>
+        <Vector id="5">7</Vector>
+        <Vector id="6">3</Vector>
+        <Vector id="7">3</Vector>
+      </Buffer>
+      <Buffer length="8" type="f32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">1.0</Vector>
+        <Vector id="1">1.0</Vector>
+        <Vector id="2">2.0</Vector>
+        <Vector id="3">2.0</Vector>
+        <Vector id="4">0.25</Vector>
+        <Vector id="5">0.25</Vector>
+        <Vector id="6">16.0</Vector>
+        <Vector id="7">16.0</Vector>
+      </Buffer>
+      <Buffer length="8" type="i32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">0</Vector>
+        <Vector id="1">0</Vector>
+        <Vector id="2">4</Vector>
+        <Vector id="3">4</Vector>
+        <Vector id="4">0</Vector>
+        <Vector id="5">0</Vector>
+        <Vector id="6">0</Vector>
+        <Vector id="7">0</Vector>
+      </Buffer>
+      <Buffer length="8" type="i32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">0</Vector>
+        <Vector id="1">0</Vector>
+        <Vector id="2">0</Vector>
+        <Vector id="3">0</Vector>
+        <Vector id="4">0</Vector>
+        <Vector id="5">0</Vector>
+        <Vector id="6">0</Vector>
+        <Vector id="7">0</Vector>
+      </Buffer>
+      <Buffer length="8" type="i32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">8</Vector>
+        <Vector id="1">7</Vector>
+        <Vector id="2">6</Vector>
+        <Vector id="3">5</Vector>
+        <Vector id="4">4</Vector>
+        <Vector id="5">3</Vector>
+        <Vector id="6">2</Vector>
+        <Vector id="7">1</Vector>
+      </Buffer>
+      <Buffer length="8" type="f32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">0</Vector>
+        <Vector id="1">1.0</Vector>
+        <Vector id="2">2.0</Vector>
+        <Vector id="3">0.5</Vector>
+        <Vector id="4">0.25</Vector>
+        <Vector id="5">-1.0</Vector>
+        <Vector id="6">1.0</Vector>
+        <Vector id="7">16.0</Vector>
+      </Buffer>
+      <Buffer length="1" type="u32" type_size_in_bytes="4" neat="0">
+        <Vector id="0">2</Vector>
+      </Buffer>
+    </BufferContainer>
+  </BufferContainerList>
+</ICSCData>

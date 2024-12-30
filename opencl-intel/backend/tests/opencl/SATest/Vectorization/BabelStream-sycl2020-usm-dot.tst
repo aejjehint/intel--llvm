@@ -1,0 +1,9 @@
+; RUN: SATest -BUILD -config=%s.cfg -build-log 2>&1 | FileCheck %s
+
+; IR is simplified from kernel https://github.com/UoB-HPC/BabelStream/blob/2f00dfb7f8b7cfe8c53d20d5c770bccbf8673440/src/sycl2020-usm/SYCLStream2020.cpp#L157-L168
+; by removing some code after the barrier.
+; There is uniform store of divergent value in the IR.
+; Check the kernel is vectorized as we set -vplan-allow-scalar-stores to true.
+
+; CHECK-NOT: loop not vectorized
+; CHECK: Kernel "_ZTSZZN4sycl3_V16detail16NDRangeReductionILNS1_9reduction8strategyE1EE3runINS1_9auto_nameELi1ENS0_3ext6oneapi12experimental10propertiesISt5tupleIJEEEEZNS1_22reduction_parallel_forIS7_LS4_0ELi1ESE_JNS1_14reduction_implIdSt4plusIdELi0ELm1ELb0EPdEEZZN10SYCLStreamIdE3dotEvENKUlRNS0_7handlerEE_clESO_EUlNS0_2idILi1EEERT_E_EEEvSO_NS0_5rangeIXT1_EEET2_DpT3_EUlSS_DpRT0_E_SK_EEvSO_RSt10shared_ptrINS1_10queue_implEENS0_8nd_rangeIXT0_EEERT1_RT3_RSX_ENKUlSS_E_clINS0_8accessorIiLi1ELNS0_6access4modeE1026ELNS1I_6targetE2014ELNS1I_11placeholderE0ENS9_22accessor_property_listIJEEEEEEEDaSS_EUlNS0_7nd_itemILi1EEEE_" was successfully vectorized
