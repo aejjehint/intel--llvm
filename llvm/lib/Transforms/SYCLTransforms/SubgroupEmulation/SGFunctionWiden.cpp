@@ -11,6 +11,7 @@
 #include "llvm/Transforms/SYCLTransforms/SubgroupEmulation/SGFunctionWiden.h"
 #include "llvm/ADT/DenseMap.h"
 #include "llvm/Analysis/VectorUtils.h"
+#include "llvm/IR/AttributeMask.h"
 #include "llvm/IR/DIBuilder.h"
 #include "llvm/IR/DebugInfo.h"
 #include "llvm/IR/IRBuilder.h"
@@ -51,7 +52,7 @@ void FunctionWidener::run(FuncSet &Functions,
 
     SmallVector<VFInfo, 8> VecVariants(
         map_range(VecVariantsStr,
-                  [&M](StringRef S) { return VFABI::tryDemangleForVFABI(S, M).value(); } ));
+                  [&Fn](StringRef S) { return VFABI::tryDemangleForVFABI(S, Fn->getFunctionType()).value(); } ));
 
     for (const VFInfo &Variant : VecVariants) {
       Function *FnWiden = Fn->getParent()->getFunction(Variant.VectorName);

@@ -10,6 +10,7 @@
 
 #include "llvm/Transforms/SYCLTransforms/BuiltinImport.h"
 #include "llvm/ADT/EquivalenceClasses.h"
+#include "llvm/IR/AttributeMask.h"
 #include "llvm/IR/InstIterator.h"
 #include "llvm/Linker/Linker.h"
 #include "llvm/Support/CommandLine.h"

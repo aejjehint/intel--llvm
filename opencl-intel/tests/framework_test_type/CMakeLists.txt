@@ -49,7 +49,7 @@ find_sources()
 calculate_target_sources()
 
 set(TARGET_LIBS
-  LLVMDebugInfoTraceBack
+  # LLVMDebugInfoTraceBack
   LLVMMC
   LLVMObject
   LLVMSupport

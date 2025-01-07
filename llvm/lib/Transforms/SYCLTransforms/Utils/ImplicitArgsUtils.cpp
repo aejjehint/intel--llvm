@@ -12,6 +12,7 @@
 #include "llvm/Transforms/SYCLTransforms/KernelArgType.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/CompilationUtils.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/TypeAlignment.h"
+#include "llvm/Support/CommandLine.h"
 #include <algorithm>
 
 using namespace llvm;

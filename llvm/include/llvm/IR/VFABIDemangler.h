@@ -21,6 +21,15 @@
 
 namespace llvm {
 
+namespace VectorUtils {
+// The attribute provides a list of vector variants for a scalar function.
+// When attached to a function definition the list specifies vector variants
+// need to be generated from the original (scalar) version.
+// When attached to a call, tells loop vectorizer about available vector
+// variants for the call.
+constexpr const char *VectorVariantsAttrName = "vector-variants";
+} // namespace VectorUtils
+
 /// Describes the type of Parameters
 enum class VFParamKind {
   Vector,            // No semantic information.
@@ -44,6 +53,7 @@ enum class VFParamKind {
 enum class VFISAKind {
   AdvancedSIMD, // AArch64 Advanced SIMD (NEON)
   SVE,          // AArch64 Scalable Vector Extension
+  RVV,          // RISC-V Vector Extension
   SSE,          // x86 SSE
   AVX,          // x86 AVX
   AVX2,         // x86 AVX2
@@ -63,13 +73,21 @@ struct VFParameter {
   unsigned ParamPos;         // Parameter Position in Scalar Function.
   VFParamKind ParamKind;     // Kind of Parameter.
   int LinearStepOrPos = 0;   // Step or Position of the Parameter.
-  Align Alignment = Align(); // Optional alignment in bytes, defaulted to 1.
+  MaybeAlign Alignment = std::nullopt; // Optional alignment in bytes, defaulted to 1.
 
   // Comparison operator.
   bool operator==(const VFParameter &Other) const {
     return std::tie(ParamPos, ParamKind, LinearStepOrPos, Alignment) ==
            std::tie(Other.ParamPos, Other.ParamKind, Other.LinearStepOrPos,
                     Other.Alignment);
+  }
+  
+  /// Is this a mask parameter?
+  bool isMask() const { return ParamKind == VFParamKind::GlobalPredicate; }
+
+  // Create a mask parameter at the given position.
+  static VFParameter mask(unsigned Pos) {
+    return VFParameter{Pos, VFParamKind::GlobalPredicate, 0, std::nullopt};
   }
 };
 
@@ -125,6 +143,11 @@ struct VFInfo {
   std::string ScalarName; /// Scalar Function Name.
   std::string VectorName; /// Vector Function Name associated to this VFInfo.
   VFISAKind ISA;          /// Instruction Set Architecture.
+  /// The full variant name (including possible alias.)
+  std::string FullName;
+
+  /// VFABI prefix
+  static constexpr const char *PREFIX = "_ZGV";
 
   /// Returns the index of the first parameter with the kind 'GlobalPredicate',
   /// if any exist.
@@ -140,6 +163,84 @@ struct VFInfo {
   /// Returns true if at least one of the operands to the vectorized function
   /// has the kind 'GlobalPredicate'.
   bool isMasked() const { return getParamIndexForOptionalMask().has_value(); }
+
+public:
+  /// Get a new VFInfo with the given ISA, Mask, VF, parameters and
+  /// scalar name (and possible alias).
+  static VFInfo get(VFISAKind ISA, bool Masked, unsigned VF,
+                    SmallVector<VFParameter, 8> Parameters,
+                    StringRef ScalarName, StringRef Alias = "") {
+
+    assert(llvm::none_of(Parameters,
+                         [](const VFParameter &P) { return P.isMask(); }) &&
+           "Mask parameters should not be passed directly");
+
+    // Add mask param to masked variants
+    if (Masked)
+      Parameters.push_back(VFParameter::mask(Parameters.size()));
+
+    std::string EncodedName =
+        encodeFromParts(ISA, Masked, VF, Parameters, ScalarName);
+
+    std::string VectorName, FullName;
+    if (Alias.empty()) {
+      VectorName = std::move(EncodedName);
+      FullName = VectorName;
+    } else {
+      VectorName = std::string(Alias);
+      FullName = (std::move(EncodedName) + "(" + Alias + ")").str();
+    }
+
+    auto Shape = VFShape{ElementCount::getFixed(VF), std::move(Parameters)};
+    // assert(Shape.hasValidParameterList(/*Permissive=*/true) &&
+    //        "Invalid parameter list");
+
+    return VFInfo{std::move(Shape), std::string(ScalarName),
+                  std::move(VectorName), ISA, std::move(FullName)};
+  }
+
+  /// Get a new VFInfo with the given ISA, Mask, VF, parameters and
+  /// scalar name (and possible alias).
+  static VFInfo get(VFISAKind ISA, bool Masked, unsigned VF,
+                    ArrayRef<VFParameter> Parameters, StringRef ScalarName,
+                    StringRef Alias = "") {
+    return VFInfo::get(
+        ISA, Masked, VF,
+        SmallVector<VFParameter, 8>(Parameters.begin(), Parameters.end()),
+        ScalarName, Alias);
+  }
+
+  /// Get a new VFInfo with the given ISA, Mask, VF, parameter kinds and
+  /// scalar name (and possible alias).
+  ///
+  /// NOTE: This is a convenience function only used to create variants with
+  /// Vector or Uniform parameter kinds. To generate vector variants with other
+  /// kinds of parameters, use the other overload.
+  static VFInfo get(VFISAKind ISA, bool Masked, unsigned VF,
+                    ArrayRef<VFParamKind> ParamKinds, StringRef ScalarName,
+                    StringRef Alias = "") {
+    SmallVector<VFParameter, 8> Parameters(map_range(
+        enumerate(ParamKinds), [](const auto &IndexedKind) -> VFParameter {
+          unsigned ParamPos = IndexedKind.index();
+          VFParamKind ParamKind = IndexedKind.value();
+          assert((ParamKind == VFParamKind::Vector ||
+                  ParamKind == VFParamKind::OMP_Uniform) &&
+                 // Can only add vector or uniform parameters -- other kinds
+                 // require additional data.
+                 "Can only pass vector or uniform param kinds!");
+          return VFParameter{ParamPos, ParamKind};
+        }));
+
+    return VFInfo::get(ISA, Masked, VF, std::move(Parameters), ScalarName,
+                       Alias);
+  }
+
+private:
+  /// Encode the full mangled name of a vector variant from its constituent
+  /// parts (e.g. '_ZGVbM4v_foo')
+  static std::string encodeFromParts(VFISAKind Isa, bool Mask, unsigned VF,
+                                     ArrayRef<VFParameter> Parameters,
+                                     StringRef ScalarName);
 };
 
 namespace VFABI {

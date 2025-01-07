@@ -20,6 +20,7 @@
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/IR/InstIterator.h"
+#include "llvm/IR/IntrinsicInst.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/InstructionCost.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/CompilationUtils.h"

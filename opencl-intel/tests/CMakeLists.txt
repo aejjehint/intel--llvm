@@ -43,7 +43,7 @@ macro(compile_bitcode SOURCE OUTPUT)
       ${CLANG} -cc1 -x cl ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCE}
       -I${CLANG_OPENCL_HEADERS_DIR} -emit-llvm-bc ${SPIR_OPTIONS}
       -disable-llvm-passes
-      -disable-intel-proprietary-opts #INTEL
+      # -disable-intel-proprietary-opts #INTEL
       -include opencl-c.h
       ${ARG_EXTRA_CLANG_FLAGS}
       -o ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT}

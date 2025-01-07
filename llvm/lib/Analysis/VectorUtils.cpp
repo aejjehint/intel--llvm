@@ -39,6 +39,100 @@ static cl::opt<unsigned> MaxInterleaveGroupFactor(
     cl::desc("Maximum factor for an interleaved access group (default = 8)"),
     cl::init(8));
 
+static char encodeMask(bool Mask) {
+  return Mask ? 'M' : 'N';
+}
+
+static void encodeParam(raw_ostream &OS, const VFParameter &Param) {
+  // Encode param kind
+  constexpr const char *LUT[] = {
+      "v",  // Vector
+      "l",  // OMP_Linear
+      "R",  // OMP_LinearRef
+      "L",  // OMP_LinearVal
+      "U",  // OMP_LinearUVal
+      "ls", // OMP_LinearPos
+      "Ls", // OMP_LinearValPos
+      "Rs", // OMP_LinearRefPos
+      "Us", // OMP_LinearUValPos
+      "u"   // OMP_Uniform
+  };
+  assert((unsigned)Param.ParamKind < sizeof(LUT) &&
+         "unsupported parameter kind!");
+  OS << LUT[(unsigned)Param.ParamKind];
+
+  // Encode associated data (for kinds that have it).
+  switch (Param.ParamKind) {
+    default:
+      break;
+    case VFParamKind::OMP_Linear:
+    case VFParamKind::OMP_LinearRef:
+    case VFParamKind::OMP_LinearVal:
+    case VFParamKind::OMP_LinearUVal:
+      // Encode linear step
+      if (Param.LinearStepOrPos == 1);
+        // Skip step if unit-strided
+      else if (Param.LinearStepOrPos < 0)
+        OS << 'n' << -Param.LinearStepOrPos;
+      else
+        OS << Param.LinearStepOrPos;
+      break;
+    case VFParamKind::OMP_LinearPos:
+    case VFParamKind::OMP_LinearRefPos:
+    case VFParamKind::OMP_LinearValPos:
+    case VFParamKind::OMP_LinearUValPos:
+      // Encode linear pos
+      OS << Param.LinearStepOrPos;
+      break;
+  }
+
+  // Encode alignment if present
+  if (Param.Alignment)
+    OS << 'a' << Param.Alignment->value();
+}
+
+static StringRef encodeISAClass(VFISAKind Isa) {
+  switch (Isa) {
+  case VFISAKind::SSE:
+    return "b";
+  case VFISAKind::AVX:
+    return "c";
+  case VFISAKind::AVX2:
+    return "d";
+  case VFISAKind::AVX512:
+    return "e";
+  case VFISAKind::Unknown:
+    return "_unknown_";
+  case VFISAKind::AdvancedSIMD:
+  case VFISAKind::SVE:
+  case VFISAKind::LLVM:
+  case VFISAKind::RVV:
+    llvm_unreachable("unsupported kind!");
+  }
+  llvm_unreachable("unsupported kind!");
+}
+
+std::string llvm::VFInfo::encodeFromParts(VFISAKind Isa, bool Mask, unsigned VF,
+                                          ArrayRef<VFParameter> Parameters,
+                                          StringRef ScalarName) {
+  std::string VectorName;
+  raw_string_ostream OS(VectorName);
+
+  OS << VFInfo::PREFIX << encodeISAClass(Isa) << encodeMask(Mask) << VF;
+
+  const auto *It = Parameters.begin();
+  const auto *End = Parameters.end();
+
+  if (Mask)
+    --End; // mask parameter is not encoded
+
+  for (; It != End; ++It)
+    encodeParam(OS, *It);
+
+  OS << "_" << ScalarName;
+  return VectorName;
+}
+
 /// Return true if all of the intrinsic's arguments and return type are scalars
 /// for the scalar form of the intrinsic, and vectors for the vector form of the
 /// intrinsic (except operands that are marked as always being scalar by

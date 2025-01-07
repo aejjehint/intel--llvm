@@ -60,10 +60,10 @@
 /// dst.qword[0] := W[0] + s0(W[1])
 /// dst[MAX:256] := 0
 /// \endcode
-static __inline__ __m256i __DEFAULT_FN_ATTRS256
-_mm256_sha512msg1_epi64(__m256i __A, __m128i __B) {
-  return (__m256i)__builtin_ia32_vsha512msg1((__v4du)__A, (__v2du)__B);
-}
+// static __inline__ __m256i __DEFAULT_FN_ATTRS256
+// _mm256_sha512msg1_epi64(__m256i __A, __m128i __B) {
+//   return (__m256i)__builtin_ia32_vsha512msg1((__v4du)__A, (__v2du)__B);
+// }
 
 /// This intrinisc is one of the two SHA512 message scheduling instructions.
 ///    The intrinsic performs the final calculation for the next four SHA512
@@ -108,10 +108,10 @@ _mm256_sha512msg1_epi64(__m256i __A, __m128i __B) {
 /// dst.qword[0] := W[16]
 /// dst[MAX:256] := 0
 /// \endcode
-static __inline__ __m256i __DEFAULT_FN_ATTRS256
-_mm256_sha512msg2_epi64(__m256i __A, __m256i __B) {
-  return (__m256i)__builtin_ia32_vsha512msg2((__v4du)__A, (__v4du)__B);
-}
+// static __inline__ __m256i __DEFAULT_FN_ATTRS256
+// _mm256_sha512msg2_epi64(__m256i __A, __m256i __B) {
+//   return (__m256i)__builtin_ia32_vsha512msg2((__v4du)__A, (__v4du)__B);
+// }
 
 /// This intrinisc performs two rounds of SHA512 operation using initial SHA512
 ///    state (C,D,G,H) from \a __A, an initial SHA512 state (A,B,E,F) from
@@ -189,11 +189,11 @@ _mm256_sha512msg2_epi64(__m256i __A, __m256i __B) {
 /// dst.qword[0] := F[2]
 /// dst[MAX:256] := 0
 /// \endcode
-static __inline__ __m256i __DEFAULT_FN_ATTRS256
-_mm256_sha512rnds2_epi64(__m256i __A, __m256i __B, __m128i __C) {
-  return (__m256i)__builtin_ia32_vsha512rnds2((__v4du)__A, (__v4du)__B,
-                                              (__v2du)__C);
-}
+// static __inline__ __m256i __DEFAULT_FN_ATTRS256
+// _mm256_sha512rnds2_epi64(__m256i __A, __m256i __B, __m128i __C) {
+//   return (__m256i)__builtin_ia32_vsha512rnds2((__v4du)__A, (__v4du)__B,
+//                                               (__v2du)__C);
+// }
 
 #undef __DEFAULT_FN_ATTRS256
 

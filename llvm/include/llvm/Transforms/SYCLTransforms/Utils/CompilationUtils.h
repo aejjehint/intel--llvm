@@ -89,6 +89,11 @@ template <> struct GraphTraits<Use *> {
 // 3. mangled vector variant name
 using VectItem = std::tuple<const char *, const char *, const char *>;
 
+// A pair of two strings:
+// 1. an alias of builtin
+// 2. builtin name
+using BuiltinAliasItem = std::pair<const char *, const char *>;
+
 enum class SyncType { None, Barrier, DummyBarrier };
 
 enum class SubGroupConstructionMode { Linear = -1, X = 0, Y = 1, Z = 2 };
@@ -797,6 +802,14 @@ void insertPrintf(const Twine &Prefix, IRBuilder<> &Builder,
 
 CallInst *createGetMaxSubGroupSizeCall(Instruction *IP, const Twine &Name);
 CallInst *createGetSubGroupLocalIdCall(Instruction *IP, const Twine &Name);
+
+void initializeBuiltinAliases(
+    std::unordered_map<std::string, std::string> &mapAliasBuiltin);
+
+/// Check whether the given FixedVectorType represents a valid SYCL matrix.
+bool isValidMatrixType(FixedVectorType *MatrixType);
+
+reflection::TypePrimitiveEnum getPrimitiveTypeOfString(StringRef T);
 
 void calculateMemorySizeWithPostOrderTraversal(
     CallGraph &CG, DenseMap<Function *, size_t> &FnDirectSize,

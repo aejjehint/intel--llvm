@@ -189,6 +189,8 @@ def do_configure(args):
         "-DSYCL_ENALBE_OPENCL_CPU_RT_BUILD={}".format(sycl_enable_opencl_cpu_rt_build),
         "-DSYCL_ENALBE_FPGA_EMU_RT_BUILD={}".format(sycl_enable_fpga_emu_build),
         "-DCOMMON_CLANG_LIBRARY_NAME=common_clang",
+        "-DTBB_DIR=/nfs/site/disks/swuser_work_jisheng1/hsd/test_emu/build/external/sycl-libraries/tbb/build/install",
+        "-DCMAKE_PREFIX_PATH=/nfs/site/disks/swuser_work_jisheng1/hsd/test_emu/build/external/sycl-libraries/tbb/build/install/lib64/cmake/TBB",
         "-DLLVM_ENABLE_ZSTD={}".format(llvm_enable_zstd),
         "-DLLVM_USE_STATIC_ZSTD=ON",
         "-DSYCL_ENABLE_WERROR={}".format(sycl_werror),

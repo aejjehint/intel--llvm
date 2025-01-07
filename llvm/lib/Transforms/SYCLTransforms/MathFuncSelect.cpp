@@ -21,6 +21,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/PassManager.h"
+#include "llvm/Support/Debug.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/NameMangleAPI.h"
 #include <cmath>

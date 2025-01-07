@@ -35,7 +35,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CLANG_OPENCL_HEADERS_DIR}
           ${OCL_CLANG_HEADER_DIR}
   COMMAND
-    python ${SEARCH_REPLACE_SCRIPT_DIR}/search_replace.py
+    python3 ${SEARCH_REPLACE_SCRIPT_DIR}/search_replace.py
     ${CLANG_OPENCL_HEADERS_DIR}/*intrin.h
     --batch-file=${SEARCH_REPLACE_SCRIPT_DIR}/intrin.pattern
     --output-dir=${OCL_CLANG_HEADER_DIR}
@@ -158,7 +158,7 @@ set(CLANG_CL_COMMON_FLAGS
     -emit-llvm-bc
     -fwrapv
     ${CL_OPT_LEVEL}
-    -disable-intel-proprietary-opts # INTEL
+    # -disable-intel-proprietary-opts # INTEL
     -x
     cl
     -I

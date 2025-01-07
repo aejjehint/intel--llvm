@@ -13,7 +13,7 @@ set(CPU_DEVICE_TEST_TYPE_LINK_LIBS
   LLVMBinaryFormat
   LLVMDebugInfoBTF
   LLVMDebugInfoDWARF
-  LLVMDebugInfoTraceBack
+  # LLVMDebugInfoTraceBack
   LLVMInstrumentation
   LLVMIntelJITProfiling
   LLVMIntelJITEvents

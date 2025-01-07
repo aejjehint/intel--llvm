@@ -16,6 +16,7 @@
 
 #include "llvm/Transforms/SYCLTransforms/ReqdSubGroupSize.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Debug.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/MetadataAPI.h"
 
 #define DEBUG_TYPE "sycl-kernel-reqd-sub-group-size"

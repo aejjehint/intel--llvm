@@ -8,6 +8,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "llvm/ADT/SetVector.h"
 #include "llvm/Transforms/SYCLTransforms/AddImplicitArgs.h"
 #include "llvm/IR/Attributes.h"
 #include "llvm/IR/InstIterator.h"

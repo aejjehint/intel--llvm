@@ -80,6 +80,8 @@ set(CLANG_CL_COMMON_COMPILER_FLAGS
     float_atomics_enable
     -Werror
     -Wall
+    -Wno-typedef-redefinition
+    -Wno-unknown-attributes
     -Wno-psabi)
 
 set(CLANG_CL_BUILTIN_COMPILER_FLAGS
@@ -94,7 +96,7 @@ set(CLANG_C_COMPILER_PARAMS
     -emit-llvm-bc
     -fwrapv
     ${CL_OPT_LEVEL}
-    -disable-intel-proprietary-opts # INTEL
+    # -disable-intel-proprietary-opts # INTEL
     -I
     ${IMPORT_DIR}
     ${INCLUDE_OCL_CLANG_HEADERS}
@@ -234,7 +236,7 @@ function(
         ${CL_BUILTIN_SOURCE_DIR}/${TARGET_DIR}/${ARCH}_vectorizer.ll
       COMMAND
         ${OPT} ${OUTPUT_DIR}/${OUTPUT_FILE}_link ${CL_OPT_LEVEL}
-        -disable-intel-proprietary-opts # INTEL
+        # -disable-intel-proprietary-opts # INTEL
         -o ${BUILTINS_OUTPUT_DIR}/${OUTPUT_FILE}
       DEPENDS ${LLVM_LINK} ${OPT} ${TMP_FILES}
               ${CL_BUILTIN_SOURCE_DIR}/${TARGET_DIR}/${ARCH}_vectorizer.ll
@@ -298,7 +300,7 @@ function(
       "-passes=${OPT_PASSES}sycl-kernel-builtin-import,function(sycl-kernel-builtin-call-to-inst)"
       -o ${OUTPUT_DIR}/${OUTPUT_FILE}_noopt_gas
     COMMAND ${OPT} ${OUTPUT_DIR}/${OUTPUT_FILE}_noopt_gas ${CL_OPT_LEVEL}
-            -disable-intel-proprietary-opts # INTEL
+            # -disable-intel-proprietary-opts # INTEL
 	    -o ${OUTPUT_DIR}/${OUTPUT_FILE}_opt
     DEPENDS ${OPT} ${OUTPUT_DIR}/${UNOPTIMIZED_LIB}
       ${BUILTINS_OUTPUT_DIR}/${BI_LIB_NAME}${OCL_OUTPUT_EXTENSION}
@@ -583,6 +585,11 @@ set(RTL_MINIMAL
     ${BUILTINS_OUTPUT_DIR}/${TARGET_NAME_PREFIX}${MINIMAL_SUFFIX}.rtl)
 set(TARGET_NAME_MINIMAL ${TARGET_NAME_PREFIX}${MINIMAL_SUFFIX})
 
+set(TARGET_NAME_AVX ${TARGET_NAME_PREFIX}${PrefixAVX})
+set(TARGET_NAME_AVX2 ${TARGET_NAME_PREFIX}${PrefixAVX2})
+set(TARGET_NAME_AVX512 ${TARGET_NAME_PREFIX}${PrefixAVX512})
+set(TARGET_NAME_AMX ${TARGET_NAME_PREFIX}${PrefixAMX})
+
 set(RTL_SHARED ${BUILTINS_SHARED_OUTPUT_DIR}/${TARGET_NAME_PREFIX}shared.rtl)
 
 # Pipe built-ins for FPGA are used (linked into) in Backend and Runtime:
@@ -595,7 +602,7 @@ set(RTL_SHARED ${BUILTINS_SHARED_OUTPUT_DIR}/${TARGET_NAME_PREFIX}shared.rtl)
 #
 add_custom_target(clbltpipe_target DEPENDS clbltpipe.obj)
 
-add_dependencies(clbltpipe_target ${TARGET_NAME_MINIMAL} ${TARGET_NAME_SHARED})
+add_dependencies(clbltpipe_target ${TARGET_NAME_MINIMAL} ${TARGET_NAME_AVX} ${TARGET_NAME_AVX2} ${TARGET_NAME_AVX512} ${TARGET_NAME_AMX} ${TARGET_NAME_SHARED})
 
 add_custom_command(
   OUTPUT clbltpipe.obj
@@ -612,7 +619,7 @@ add_custom_command(
   COMMAND ${OPT} -sycl-kernel-builtin-lib=${RTL_MINIMAL},${RTL_SHARED}
           -passes=sycl-kernel-builtin-import pipes.bc -o pipes-builtin.bc
   COMMAND ${OPT} ${CL_OPT_LEVEL}
-          -disable-intel-proprietary-opts # INTEL
+          # -disable-intel-proprietary-opts # INTEL
           pipes-builtin.bc -o pipes-opt.bc
   COMMAND ${LLC} ${LLC_PARAMS} -mcpu=corei7 pipes-opt.bc -o clbltpipe.obj)
 

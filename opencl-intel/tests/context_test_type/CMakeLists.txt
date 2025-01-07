@@ -21,7 +21,7 @@ set(TARGET_LIBS
   LLVMBinaryFormat
   LLVMDebugInfoBTF
   LLVMDebugInfoDWARF
-  LLVMDebugInfoTraceBack
+  # LLVMDebugInfoTraceBack
   LLVMInstrumentation
   LLVMIntel_Debug
   LLVMMC

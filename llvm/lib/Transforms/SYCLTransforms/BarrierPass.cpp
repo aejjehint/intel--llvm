@@ -1382,7 +1382,7 @@ SmallVector<Instruction *>
 KernelBarrierImpl::getInstructionsToInsertBefore(Instruction *Inst,
                                                  PHINode *PhiNode) {
   auto PrevBBs = BarrierUtils::findBasicBlocksOfPhiNode(Inst, PhiNode);
-  SmallVector<Instruction *, 1> InsertBefores;
+  SmallVector<Instruction *> InsertBefores;
   for (auto *BB : PrevBBs) {
     if (BB != Inst->getParent()) {
       InsertBefores.push_back(BB->getTerminator());

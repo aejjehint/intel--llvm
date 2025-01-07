@@ -43,21 +43,21 @@ add_opencl_library(
   ${TARGET_SOURCE_FILES}
   LINK_LIBS
   LLVMInstrumentation
-  LLVMIntel_Debug
+  # LLVMIntel_Debug
   LLVMPasses
   LLVMSPIRVLib
   LLVMSYCLTransforms
   LLVMScalarOpts
   LLVMVectorize
-  LLVMVPOTransforms
+  # LLVMVPOTransforms
   OclBackendUtils
   cl_sys_utils)
 
-if(OPENCL_INTREE_BUILD)
-  add_dependencies(${TARGET_NAME}
-                   intrinsics_gen directives_gen BuiltinAliasesGen # INTEL
-		   LLVMSPIRVLib
-                   VectorizationInfoGen)
-endif()
+# if(OPENCL_INTREE_BUILD)
+#   add_dependencies(${TARGET_NAME}
+#                    intrinsics_gen directives_gen BuiltinAliasesGen # INTEL
+# 		   LLVMSPIRVLib
+#                    VectorizationInfoGen)
+# endif()
 
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER ${BACKEND_FOLDER_NAME})

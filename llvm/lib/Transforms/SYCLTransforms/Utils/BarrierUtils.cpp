@@ -57,7 +57,7 @@ void BarrierUtils::clean() {
 SmallVector<BasicBlock *>
 BarrierUtils::findBasicBlocksOfPhiNode(Value *Val, PHINode *PhiNode) {
   // Usage is a PHINode, find previous basic block according to Val
-  SmallVector<BasicBlock *, 1> PrevBBs;
+  SmallVector<BasicBlock *, 6> PrevBBs;
   for (BasicBlock *BB : predecessors(PhiNode->getParent())) {
     Value *PHINodeVal = PhiNode->getIncomingValueForBlock(BB);
     if (PHINodeVal == Val) {
