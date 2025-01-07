@@ -58,8 +58,8 @@ add_opencl_library(
   ${CMAKE_CURRENT_SOURCE_DIR} # keep it here for windows
   ${OCL_BINARY_DIR}
   LINK_LIBS
-  LLVMIntelJITProfiling
-  LLVMIntelJITEvents
+  # LLVMIntelJITProfiling
+  # LLVMIntelJITEvents
   cl_logger
   cl_sys_utils)
 

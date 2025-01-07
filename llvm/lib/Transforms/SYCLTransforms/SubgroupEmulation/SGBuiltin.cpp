@@ -94,9 +94,9 @@ bool SGBuiltinPass::insertSGBarrierForSGCalls(Module &M,
       auto MatchingVariants = make_filter_range(
           CandidateVariants,
           [&EmuSizes,
-           &M](const std::tuple<std::string, std::string, std::string> &Info) {
+           &F](const std::tuple<std::string, std::string, std::string> &Info) {
             VFInfo Variant =
-                VFABI::tryDemangleForVFABI(std::get<2>(Info), M).value();
+                VFABI::tryDemangleForVFABI(std::get<2>(Info), F.getFunctionType()).value();
             return EmuSizes.count(VectorizerUtils::getVFLength(Variant));
           });
       assert(!MatchingVariants.empty() &&

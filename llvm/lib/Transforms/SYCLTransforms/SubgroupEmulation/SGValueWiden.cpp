@@ -146,7 +146,7 @@ PreservedAnalyses SGValueWidenPass::run(Module &M, ModuleAnalysisManager &AM) {
       if (WideFn->isDeclaration())
         continue;
       LLVM_DEBUG(dbgs() << "Widen function: " << WideFn->getName() << "\n");
-      VFInfo Variant = VFABI::tryDemangleForVFABI(WideFn->getName(), M).value();
+      VFInfo Variant = VFABI::tryDemangleForVFABI(WideFn->getName(), WideFn->getFunctionType()).value();
       DominatorTree &DT = FAM.getResult<DominatorTreeAnalysis>(*WideFn);
       runOnFunction(*WideFn, VectorizerUtils::getVFLength(Variant), DT);
       auto It = find(KernelRange, Fn);
@@ -684,9 +684,8 @@ static std::pair<StringRef, unsigned> selectVariantAndEmuSize(CallInst *CI) {
   assert(ParentF->hasFnAttribute(VectorUtils::VectorVariantsAttrName) &&
          "Parent function doesn't have vector-variants attribute");
   unsigned EmuSize = 0;
-  Module &M = *(ParentF->getParent());
 
-  if (auto Variant = VFABI::tryDemangleForVFABI(ParentF->getName(), M)) {
+  if (auto Variant = VFABI::tryDemangleForVFABI(ParentF->getName(), ParentF->getFunctionType())) {
     EmuSize = VectorizerUtils::getVFLength(Variant.value());
   } else {
     StringRef ParentVariantStringValue =
@@ -697,7 +696,7 @@ static std::pair<StringRef, unsigned> selectVariantAndEmuSize(CallInst *CI) {
     LLVM_DEBUG(dbgs() << "  Parent function variant string: "
                       << ParentVariantStringValue << "\n");
     EmuSize = VectorizerUtils::getVFLength(
-        VFABI::tryDemangleForVFABI(ParentVariantStringValue, M).value());
+        VFABI::tryDemangleForVFABI(ParentVariantStringValue, ParentF->getFunctionType()).value());
   }
 
   // Get vector-variants attribute
@@ -712,7 +711,7 @@ static std::pair<StringRef, unsigned> selectVariantAndEmuSize(CallInst *CI) {
   // Select Variant and emulation size
   for (const auto &VarStr : VariantStrs) {
     unsigned Vlen = VectorizerUtils::getVFLength(
-        VFABI::tryDemangleForVFABI(VarStr, M).value());
+        VFABI::tryDemangleForVFABI(VarStr, ParentF->getFunctionType()).value());
     if (Vlen == EmuSize) {
       VariantStringValue = VarStr;
       break;
@@ -736,8 +735,8 @@ void SGValueWidenPass::widenCalls() {
     unsigned Size = 0;
     StringRef VariantStr;
     std::tie(VariantStr, Size) = selectVariantAndEmuSize(CI);
-    Module &M = *(CI->getModule());
-    auto Variant = VFABI::tryDemangleForVFABI(VariantStr, M).value();
+    Function *ParentF = CI->getFunction();
+    auto Variant = VFABI::tryDemangleForVFABI(VariantStr, ParentF->getFunctionType()).value();
     Function *WideFunc = CI->getModule()->getFunction(Variant.VectorName);
     assert(WideFunc != nullptr && "No widen function!");
     assert(FuncMap[CI->getCalledFunction()].count(WideFunc) &&

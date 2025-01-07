@@ -166,7 +166,7 @@ void OptimizerLTO::registerPipelineStartCallback(PassBuilder &PB) {
         MPM.addPass(VerifierPass());
 #endif // #ifndef NDEBUG
 
-        MPM.addPass(SYCLEqualizerPass(getBuiltinAliases()));
+        MPM.addPass(SYCLEqualizerPass());
         MPM.addPass(ExternalizeGlobalVariablesPass());
 
         if (Config.GetCoverage())
@@ -384,8 +384,8 @@ void OptimizerLTO::registerOptimizerLastCallback(PassBuilder &PB) {
         const unsigned threshold = thresholdBase * RTLoopUnrollFactor;
         // RTLoopUnrollFactor is to customize Count. However, LoopUnrollOptions
         // doesn't allow the customization.
-        UnrollOpts.setPartial(false).setRuntime(true).setThreshold(
-            threshold); // INTEL
+        // UnrollOpts.setPartial(false).setRuntime(true).setThreshold(
+        //     threshold); // INTEL
         MPM.addPass(
             createModuleToFunctionPassAdaptor(LoopUnrollPass(UnrollOpts)));
       }

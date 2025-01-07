@@ -12,6 +12,7 @@
 #define LLVM_TRANSFORMS_SYCLTRANSFORMS_PREPARE_KERNEL_ARGS_H
 
 #include "ImplicitArgsAnalysis.h"
+#include "llvm/ADT/SetVector.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/PassManager.h"

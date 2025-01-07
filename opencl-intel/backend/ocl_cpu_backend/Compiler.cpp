@@ -273,9 +273,9 @@ llvm::TargetMachine *Compiler::GetTargetMachine(llvm::Module *pModule) const {
   // the OpenCL Spec).
   // Disabling Codegen's -do-x86-global-fma optimization in this situation
   // could improve the precision (Only apply this for OpenCL program).
-  if (!CompilationUtils::isGeneratedFromOCLCPP(*pModule) &&
-      CompilationUtils::hasFDivWithFastFlag(pModule))
-    TargetOpts.DoFMAOpt = false;
+  // if (!CompilationUtils::isGeneratedFromOCLCPP(*pModule) &&
+  //     CompilationUtils::hasFDivWithFastFlag(pModule))
+  //   TargetOpts.DoFMAOpt = false;
 
   OptimizationLevel OptLevel =
       BackendUtils::getOptLevel(m_buildOptions.GetDisableOpt(), *pModule);

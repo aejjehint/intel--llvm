@@ -53,7 +53,7 @@ void build(const std::string &code, std::string fileName) {
 
   std::stringstream options;
   options << "-cc1 -x cl -emit-llvm-bc "
-             "-disable-intel-proprietary-opts " // INTEL
+            //  "-disable-intel-proprietary-opts " // INTEL
              "-include opencl-c.h -include long_vector_types.h";
   options << " "
           << "-opencl-builtins -fblocks -cl-std=CL3.0";

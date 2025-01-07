@@ -76,8 +76,8 @@ if(WIN32)
     cl_sys_utils
     libprotobuf
     LLVMCore
-    LLVMIntelJITProfiling
-    LLVMIntelJITEvents
+    # LLVMIntelJITProfiling
+    # LLVMIntelJITEvents
     RC_TEMPLATE
     ${CMAKE_CURRENT_SOURCE_DIR}/OclCpuDebugging.rc.in)
 

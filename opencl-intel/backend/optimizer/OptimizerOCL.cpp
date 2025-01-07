@@ -151,7 +151,7 @@ void OptimizerOCL::materializerPM(ModulePassManager &MPM) const {
   }
 
   MPM.addPass(NameAnonGlobalPass());
-  MPM.addPass(SYCLEqualizerPass(getBuiltinAliases()));
+  MPM.addPass(SYCLEqualizerPass());
   MPM.addPass(ExternalizeGlobalVariablesPass());
   Triple TargetTriple(m_M.getTargetTriple());
   if (TargetTriple.isArch64Bit()) {
@@ -253,7 +253,7 @@ void OptimizerOCL::createStandardLLVMPasses(ModulePassManager &MPM) const {
   // everything in the top-most loop), cost threshold, explicit unroll
   // count, allow partial unrolling, allow runtime unrolling.
   LoopUnrollOptions UnrollOpts(Level.getSpeedupLevel());
-  UnrollOpts.setPartial(false).setRuntime(false).setThreshold(512); // INTEL
+  // UnrollOpts.setPartial(false).setRuntime(false).setThreshold(512); // INTEL
   FPM3.addPass(LoopUnrollPass(UnrollOpts));
 
   // unroll loops with non-constant trip count
@@ -264,8 +264,8 @@ void OptimizerOCL::createStandardLLVMPasses(ModulePassManager &MPM) const {
     const unsigned threshold = thresholdBase * RTLoopUnrollFactor;
     // RTLoopUnrollFactor is to customize Count. However, LoopUnrollOptions
     // doesn't allow the customization.
-    UnrollOpts.setPartial(false).setRuntime(true).setThreshold(
-        threshold); // INTEL
+    // UnrollOpts.setPartial(false).setRuntime(true).setThreshold(
+    //     threshold); // INTEL
     FPM3.addPass(LoopUnrollPass(UnrollOpts));
   }
 
@@ -443,7 +443,7 @@ void OptimizerOCL::populatePassesPostFailCheck(ModulePassManager &MPM) const {
   FunctionPassManager FPM1;
   if (Level != OptimizationLevel::O0) {
     LoopUnrollOptions UnrollOpts(Level.getSpeedupLevel());
-    UnrollOpts.setPartial(false).setRuntime(false).setThreshold(16); // INTEL
+    // UnrollOpts.setPartial(false).setRuntime(false).setThreshold(16); // INTEL
     FPM1.addPass(LoopUnrollPass(UnrollOpts));
 
     FPM1.addPass(OptimizeIDivAndIRemPass());
@@ -613,7 +613,7 @@ void OptimizerOCL::populatePassesPostFailCheck(ModulePassManager &MPM) const {
   // Unroll small loops
   if (Level != OptimizationLevel::O0) {
     LoopUnrollOptions UnrollOpts(Level.getSpeedupLevel());
-    UnrollOpts.setPartial(false).setRuntime(false).setThreshold(4); // INTEL
+    // UnrollOpts.setPartial(false).setRuntime(false).setThreshold(4); // INTEL
     MPM.addPass(createModuleToFunctionPassAdaptor(LoopUnrollPass(UnrollOpts)));
   }
 

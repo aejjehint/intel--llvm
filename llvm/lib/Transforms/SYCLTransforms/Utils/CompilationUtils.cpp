@@ -3014,28 +3014,6 @@ void patchNotInlinedTIDUserFunc(
     }
   }
 
-  // If there are __intel_indirect_call calls and one of indirectly called
-  // functions contains TID call, it may be hard to analyze which calls needs
-  // patching. Therefore, in this case all functions with "vector_function_ptrs"
-  // attribute and all __intel_indirect_call calls are patched unconditionally.
-  if (llvm::any_of(FuncsToPatch, [](auto *F) {
-        return F->hasFnAttribute(Attribute::VectorFunctionPtrsStrAttr);
-      })) {
-    for (auto &F : M) {
-      if (F.hasFnAttribute(Attribute::VectorFunctionPtrsStrAttr)) {
-        FuncsToPatch.insert(&F);
-        llvm::for_each(ICI->getIndirectCalls(&F), [&](CallBase *CB) {
-          CIsToPatch.insert(cast<CallInst>(CB));
-        });
-      }
-      if (F.getName().starts_with("__intel_indirect_call")) {
-        FuncsToPatch.insert(&F);
-        for (auto *U : F.users())
-          CIsToPatch.insert(cast<CallInst>(U));
-      }
-    }
-  }
-
   DenseMap<Function *, Function *> OldF2PatchedF;
 
   // Setup stuff needed for adding another argument to patched functions.
@@ -3378,6 +3356,22 @@ void findMemoryDefsOverCallGraph(
 
 bool isModuleUsingAsan(const Module &M) {
   return M.getGlobalVariable("__AsanLaunchInfo") != nullptr;
+}
+
+void initializeBuiltinAliases(
+    std::unordered_map<std::string, std::string> &mapAliasBuiltin) {
+  if (mapAliasBuiltin.empty())
+    if (OptBuiltinAliasFile.getNumOccurrences()) {
+      static ErrorOr<std::unique_ptr<MemoryBuffer>> BufOrErr =
+          MemoryBuffer::getFile(OptBuiltinAliasFile, /* IsText */ true);
+      if (BufOrErr) {
+        SmallVector<StringRef, 0> Items;
+        SplitString(BufOrErr.get()->getBuffer(), Items, " \t\n\v\f\r,{}");
+        for (size_t I = 0; I < Items.size(); I += 2)
+          mapAliasBuiltin.insert(
+              {Items[I].trim('\"').str(), Items[I + 1].trim('\"').str()});
+      }
+    }
 }
 
 } // end namespace CompilationUtils

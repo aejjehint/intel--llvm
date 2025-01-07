@@ -118,17 +118,17 @@ add_opencl_executable(
   LLVMBinaryFormat
   LLVMDebugInfoBTF
   LLVMDebugInfoDWARF
-  LLVMDebugInfoTraceBack
+  # LLVMDebugInfoTraceBack
   LLVMInstrumentation
   LLVMInterpreterPluggable
-  LLVMIntel_Debug
+  # LLVMIntel_Debug
   LLVMMC
   LLVMMCDisassembler
   LLVMMCParser
   LLVMObject
   LLVMOrcTargetProcess
   LLVMTargetParser
-  LLVMVPOTransforms
+  # LLVMVPOTransforms
   LLVMVectorize
   NEAT
   ${XMAIN_ASAN_BUILD_LINK_ORDER_WORKAROUND}

@@ -1896,7 +1896,7 @@ void ITTAPI __itt_id_create(const __itt_domain *domain, __itt_id id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, id_create, (const __itt_domain *domain, __itt_id id))
+ITT_STUBV(ITTAPI, void, id_create, (const __itt_domain *domain, __itt_id id)) 
 #define __itt_id_create(d, x) ITTNOTIFY_VOID_D1(id_create, d, x)
 #define __itt_id_create_ptr ITTNOTIFY_NAME(id_create)
 #else /* INTEL_NO_ITTNOTIFY_API */

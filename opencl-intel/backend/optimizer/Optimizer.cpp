@@ -18,7 +18,7 @@
 #include "llvm/IR/DebugInfoMetadata.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/ManagedStatic.h"
-#include "llvm/Transforms/SYCLTransforms/Intel_VectorVariant/IndirectCallLowering.h"
+// #include "llvm/Transforms/SYCLTransforms/Intel_VectorVariant/IndirectCallLowering.h"
 #include "llvm/Transforms/SYCLTransforms/SYCLKernelAnalysis.h"
 #include "llvm/Transforms/SYCLTransforms/Utils/DiagnosticInfo.h"
 #include "llvm/Transforms/SYCLTransforms/VFAnalysis.h"
@@ -62,21 +62,21 @@ namespace OpenCL {
 namespace DeviceBackend {
 
 // Load Table-Gen'erated VectInfo.gen
-static constexpr VectItem Vect[] = {
-#include "VectInfo.gen"
-};
-static constexpr ArrayRef<VectItem> VectInfos(Vect);
+// static constexpr VectItem Vect[] = {
+// #include "VectInfo.gen"
+// };
+// static constexpr ArrayRef<VectItem> VectInfos(Vect);
 
-ArrayRef<VectItem> Optimizer::getVectInfos() { return VectInfos; }
+// ArrayRef<VectItem> Optimizer::getVectInfos() { return VectInfos; }
 
 // Load Table-Gen'erated BuiltinAliases.gen
-static constexpr BuiltinAliasItem VectAliases[] = {
-#include "BuiltinAliases.gen"
-};
-static constexpr ArrayRef<BuiltinAliasItem> BuiltinAliases(VectAliases);
-ArrayRef<BuiltinAliasItem> Optimizer::getBuiltinAliases() {
-  return BuiltinAliases;
-}
+// static constexpr BuiltinAliasItem VectAliases[] = {
+// #include "BuiltinAliases.gen"
+// };
+// static constexpr ArrayRef<BuiltinAliasItem> BuiltinAliases(VectAliases);
+// ArrayRef<BuiltinAliasItem> Optimizer::getBuiltinAliases() {
+//   return BuiltinAliases;
+// }
 
 /// Customized diagnostic handler to be registered to LLVMContext before running
 /// passes. Prints error messages and throw exception if received an error

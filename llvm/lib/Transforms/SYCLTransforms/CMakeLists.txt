@@ -123,7 +123,7 @@ add_llvm_component_library(LLVMSYCLTransforms
 
   DEPENDS
   intrinsics_gen
-  directives_gen # INTEL
+  # directives_gen # INTEL
 
   LINK_COMPONENTS
   Analysis
