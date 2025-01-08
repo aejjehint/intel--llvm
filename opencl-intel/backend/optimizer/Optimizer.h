@@ -37,9 +37,9 @@ public:
 
   virtual void Optimize(llvm::raw_ostream &LogStream) = 0;
 
-  static llvm::ArrayRef<llvm::VectItem> getVectInfos();
+  // static llvm::ArrayRef<llvm::VectItem> getVectInfos();
 
-  static llvm::ArrayRef<llvm::BuiltinAliasItem> getBuiltinAliases();
+  // static llvm::ArrayRef<llvm::BuiltinAliasItem> getBuiltinAliases();
 
   /// Initialize cl::opt options in Optimizer.
   static void initOptimizerOptions();
