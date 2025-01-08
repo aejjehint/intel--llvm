@@ -627,17 +627,22 @@ if(OPENCL_BE_INCLUDE_TESTS OR OPENCL_RT_INCLUDE_TESTS)
   set_target_properties(check-ocl-all PROPERTIES FOLDER "Tests")
 endif()
 
+# link_directories(/nfs/site/disks/swuser_work_jisheng1/hsd/test_emu/itt/ittapi/build_linux/64/bin)
+
 # Entry target for ocl cpu compilation.
 add_custom_target(opencl-cpu-rt
   COMMENT "Compile all OpenCL CPU RT libraries."
-  DEPENDS process-intrin-headers common_clang${BUILD_PLATFORM} intelocl${BUILD_PLATFORM} cllibrary OpenCL-ICD
+  DEPENDS process-intrin-headers common_clang${BUILD_PLATFORM} intelocl${BUILD_PLATFORM} cllibrary OpenCL-ICD ittnotify
 )
 
 # Entry target for fpga emulator compilation
 add_custom_target(opencl-fpga-emu
   COMMENT "Compile all OpenCL FPGA emulator libraries."
-  DEPENDS process-intrin-headers common_clang${BUILD_PLATFORM} intelocl${BUILD_PLATFORM}_${OUTPUT_EMU_SUFF} cllibrary OpenCL-ICD
+  DEPENDS process-intrin-headers common_clang${BUILD_PLATFORM} intelocl${BUILD_PLATFORM}_${OUTPUT_EMU_SUFF} cllibrary OpenCL-ICD ittnotify
 )
+
+# add_dependencies(opencl-cpu-rt ittnotify)
+# add_dependencies(opencl-fpga-emu ittnotify)
 
 set(INTEL_DEPLOY_COMPONENTS_SHARED
     OpenCL-ICD
@@ -648,6 +653,7 @@ set(INTEL_DEPLOY_COMPONENTS_SHARED
     ocl-config
     ocl-gdb-plugin
     ocl-svml
+    ittnotify
     ocl-tbb)
 
 if(WIN32)

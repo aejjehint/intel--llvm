@@ -114,6 +114,7 @@ add_opencl_library(
   clang_compiler
   cpu_device
   task_executor
+  ittnotify
   LINK_LIBS
   ${FRAMEWORK_LINK_LIBS}
   RC_TEMPLATE
@@ -139,6 +140,7 @@ add_opencl_library(
   clang_compiler
   cpu_device
   task_executor
+  ittnotify
   LINK_LIBS
   ${FRAMEWORK_LINK_LIBS}
   RC_TEMPLATE

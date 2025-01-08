@@ -542,7 +542,7 @@ void OptimizerLTO::addBarrierPasses(ModulePassManager &MPM,
 
   if (SYCLEnableSubGroupEmulation) {
     // Begin sub-group emulation
-    MPM.addPass(SGBuiltinPass(getVectInfos()));
+    // MPM.addPass(SGBuiltinPass(getVectInfos()));
     MPM.addPass(SGBarrierPropagatePass());
     MPM.addPass(SGBarrierSimplifyPass());
     // Insert ImplicitGIDPass in the middle of subgroup emulation to track GIDs
