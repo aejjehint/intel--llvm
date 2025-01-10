@@ -746,6 +746,7 @@ LOOP_ANALYSIS("ddg", DDGAnalysis())
 LOOP_ANALYSIS("iv-users", IVUsersAnalysis())
 LOOP_ANALYSIS("no-op-loop", NoOpLoopAnalysis())
 LOOP_ANALYSIS("pass-instrumentation", PassInstrumentationAnalysis(PIC))
+LOOP_ANALYSIS("sycl-kernel-loop-wi-analysis", LoopWIAnalysis()) // INTEL
 LOOP_ANALYSIS("should-run-extra-simple-loop-unswitch",
                   ShouldRunExtraSimpleLoopUnswitch())
 

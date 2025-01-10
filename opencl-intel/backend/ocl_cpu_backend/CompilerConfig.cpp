@@ -110,7 +110,7 @@ void GlobalCompilerConfig::ApplyRuntimeOptions(
   // unsafe and there is race condition, it is probably undefind behavior in the
   // test because each lane in whole function vectorization is an independent
   // work-item and there is no guaranteed order of their executions.
-  m_LLVMOptions.emplace_back("-vplan-allow-scalar-stores");
+  // m_LLVMOptions.emplace_back("-vplan-allow-scalar-stores");
 
   m_targetDevice = static_cast<DeviceMode>(pBackendOptions->GetIntValue(
       (int)CL_DEV_BACKEND_OPTION_DEVICE, CPU_DEVICE));
@@ -149,7 +149,7 @@ void GlobalCompilerConfig::ApplyRuntimeOptions(
   m_LLVMOptions.emplace_back("-machine-sink-load-blocks-threshold=0");
 
   // Reduce codegen compile time in a llama example.
-  m_LLVMOptions.emplace_back("-region-splitting-iterate-threshold=100000000");
+  // m_LLVMOptions.emplace_back("-region-splitting-iterate-threshold=100000000");
 
   // Handle CL_DEV_BACKEND_OPTION_LLVM_OPTION at the end so that it can pass an
   // option to overturn a previously added option.
